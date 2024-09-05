@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Journal App
 
-## Getting Started
+## Description
 
-First, run the development server:
+This is a simple journal application built using Next.js 14 and Tailwind CSS. Users can add, edit, and delete journal entries. The application is hosted on Vercel.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- `Add`, `edit`, and `delete` journal entries.
+- Responsive design with Tailwind CSS.
+- Tags-based revalidation for fetching updated data.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Frontend** : Built with Next.js.
+- **Backend**: The app interacts with a mock API hosted on [MockAPI](https://66d6d676006bfbe2e64ec73d.mockapi.io/journal/:journals).
+- **Styling**: Tailwind CSS is used for all the UI components.
+- **Data Fetching**: Server-side data fetching with `fetch` as per requirement and client-side with Axios.
 
-## Learn More
+## Challenges Faced
 
-To learn more about Next.js, take a look at the following resources:
+- **Issue with Refreshing Data**: Initially, there were challenges in refreshing data after a journal added or edited. Using `router.refresh()` worked but had some issues. The problem was resolved by firstly navigate to `/` page then call `router.refresh()`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  **Code Snippet**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+  ```js
+  router.push("/");
+  router.refresh({ tags: ["journalEntries"] });
+  ```
 
-## Deploy on Vercel
+## How to Run the Project Locally
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Prerequisites
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Node.js installed on your local machine.
+- Git installed on your local machine.
+
+### Steps
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/lazyDeveloperAkash/journal_app
+   ```
+
+2. **Navigate to the project directory :**
+   ```bash
+   cd journal-app
+   ```
+3. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+5. **Open in browser :** `http://localhost:3000`

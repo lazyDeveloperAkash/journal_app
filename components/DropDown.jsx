@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Loader from './Loader';
 
-export default function DropDown({ entryId }) {
+export default function DropDown({ journalId }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [IsLoaderActive, setIsLoaderActive] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -22,25 +24,29 @@ export default function DropDown({ entryId }) {
   }, [isDropdownOpen]);
 
   const handleDelete = async () => {
+    const confermation = window.confirm("Would you want to delete!");
     try {
-      await axios.delete(`https://66d6d676006bfbe2e64ec73d.mockapi.io/journal/journals/${entryId}`);
+      if (!confermation) return;
+      setIsLoaderActive(true);
+      await axios.delete(`https://66d6d676006bfbe2e64ec73d.mockapi.io/journal/journals/${journalId}`);
       router.refresh({ tags: ['journalEntries'] });
     } catch (error) {
       alert('Failed to delete journal')
     } finally {
+      setIsLoaderActive(false);
       setIsDropdownOpen(false);
     }
   };
 
-  const handleEdit = ()=> {
-    router.push(`/edit/${entryId}`)
-    router.refresh({tags: ["getSingleJournal"]});
+  const handleEdit = () => {
+    router.push(`/edit/${journalId}`)
+    router.refresh({ tags: ["getSingleJournal"] });
   }
 
   return (
     <div >
       <button
-        onClick={()=> setIsDropdownOpen(!isDropdownOpen)}
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         className="text-gray-500 hover:text-gray-700"
       >
         <BsThreeDotsVertical />
@@ -52,7 +58,7 @@ export default function DropDown({ entryId }) {
             onClick={() => setIsDropdownOpen(false)}
             className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-10"
           />
-          <div className="absolute right-0 min-h-8 w-32 bg-white border rounded-xl z-20 transition duration-300 ease-in-out">
+          <div className={`absolute right-0 min-h-8 w-32 bg-white border rounded-xl z-20 transition duration-300 ease-in-out ${IsLoaderActive && "backdrop-blur-sm bg-black bg-opacity-50"}`}>
             <button
               onClick={handleEdit}
               className="block w-full px-4 py-2 hover:bg-gray-100 rounded-xl"
@@ -68,6 +74,7 @@ export default function DropDown({ entryId }) {
           </div>
         </>
       )}
+      {IsLoaderActive && <Loader/>}
     </div>
   );
 }
